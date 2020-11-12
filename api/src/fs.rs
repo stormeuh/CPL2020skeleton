@@ -272,7 +272,7 @@ pub trait DirectorySupport: InodeSupport {
 ///Enhance the previous directory support with a notion of file paths (both absolute and relative), enabling the following:
 ///- Allows looking up inodes along file paths, to allow for easier navigation.
 ///- Allows creating and unlinking (i.e. removing) directories at a given path location. The previously implemented `i_alloc` and `i_free` suffice for regular files, but can result in inconsistencies for directories.
-///- Keeps track of the current working directory in your file system (pick an appropriate type to do this! **WARNING: give this some thought **). Make sure that the inode corresponding to the current working directory cannot be freed, e.g. by changing its `nlink` appropriately. Usually, each process has its own current working directory, but since we only model a single process, we just store the current working directory in the file system.
+///- Keeps track of the current working directory in your file system (pick an appropriate type to do this! **WARNING: give this some thought **). Usually, each process has its own current working directory, but since we only model a single process, we just store the current working directory in the file system.
 ///
 ///Do not forget to adapt the call to `mkfs`, so that the root directory is no longer empty, but like all other directories, gets initialized with "." and ".." as its first two entries. The root directory is a special case, however, in the sense that ".." also points back to the root directory itself, since it has no parent.
 ///Make sure the `nlink` field of the root directory is equal to 1 still, after the initialization phase.
