@@ -102,7 +102,7 @@ pub trait BlockSupport: FileSysSupport {
     fn b_put(&mut self, b: &Block) -> Result<(), Self::Error>;
 
     /// Free the *i*th block *in the block data region*, by setting the *i*th bit in the free bit map region to zero.
-    /// To disambiguate the binary representation, we define the order of the bits within each byte you read from right to left, i.e. the byte '0b0000_0001' has its **first** bit set to zero, i.e. has its bit with index 0 set to 0.
+    /// To disambiguate the binary representation, we define the order of the bits within each byte you read from right to left, i.e. the byte '0b0000_0001' has its **first** bit set to one, i.e. has its bit with index 0 set to 1.
     /// Be careful not to change any bits for other blocks around the *i*th block by overwriting an entire byte in the free bit map region!
     /// Consider writing some auxiliary methods for more fine-grained access to `Block`s, by wrapping the provided block type in a different type.
     ///
