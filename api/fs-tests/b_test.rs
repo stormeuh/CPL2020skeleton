@@ -142,7 +142,7 @@ fn itrunc() {
     let path = disk_prep_path("itrunc");
     let mut my_fs = FSName::mkfs(&path, &SUPERBLOCK_GOOD).unwrap();
 
-    //Allocate blocks 5-6-7-8
+    //Allocate blocks 5-6-7-8-9
     for i in 0..5 {
         assert_eq!(my_fs.b_alloc().unwrap(), i);
     }
