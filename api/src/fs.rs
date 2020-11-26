@@ -197,7 +197,8 @@ pub trait InodeRWSupport: InodeSupport {
     /// Write `n` bytes of data from the given buffer `buff` into the inode `inode`, starting from byte offset `off`
     /// If the end of the file is reached while writing, **continue writing**.
     /// If necessary, start allocating extra blocks to expand the file and continue writing into the new blocks.
-    /// However, returns 0 and does not write anything in case the provided offset falls outside of the file's bounds.
+    /// Allows writes to start at index `inode.get_size()`.
+    /// By contrast, returns an error and does not write anything in case the provided starting index falls further outside of the file's bounds.
     /// If the inode changes while writing, do not forget to write it back to the disk too.
     /// Returns an error if `buf` cannot hold at least `n` bytes of data.
     /// If the write would make the inode exceed its maximum possible size, do nothing and return an error.
