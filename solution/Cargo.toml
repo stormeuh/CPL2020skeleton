@@ -13,6 +13,7 @@ version = "*"
 [dependencies]
 anyhow = "1.0.33" #Blanket error handling
 thiserror = "1.0.21" #Concise error definitions, avoiding boilerplate
+libmath = "0.2.1"
 
 [features]
 # A feature with no dependencies is used mainly for conditional compilation,

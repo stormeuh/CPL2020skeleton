@@ -18,8 +18,7 @@
 //!
 //! COMMENTS:
 //!
-//! ...
-//!
+//! 
 
 // Turn off the warnings we get from the below example imports, which are currently unused.
 // TODO: this should be removed once you are done implementing this file. You can remove all of the below imports you do not need, as they are simply there to illustrate how you can import things.
@@ -28,17 +27,109 @@
 // std::error::Error, etc.
 use std::error;
 use std::fmt;
+use std::path::Path;
 
 // If you want to import things from the API crate, do so as follows:
-use cplfs_api::fs::FileSysSupport;
-use cplfs_api::types::{Block, Inode};
+use cplfs_api::fs::{FileSysSupport, BlockSupport};
+use cplfs_api::controller::Device;
+use cplfs_api::types::{Block, Inode, SuperBlock, DINODE_SIZE};
+
+// General rust utilities
+use math::round::{floor,ceil};
+
+use thiserror::Error;
 
 /// You are free to choose the name for your file system. As we will use
 /// automated tests when grading your assignment, indicate here the name of
 /// your file system data type so we can just use `FSName` instead of
 /// having to manually figure out your file system name.
 /// **TODO**: replace the below type by the type of your file system
-pub type FSName = ();
+pub type FSName = EsFS1;
+
+pub struct EsFS1 {
+   dev: Device,
+   sb: SuperBlock,
+}
+
+impl BlockSupport for EsFS1 { 
+    fn b_get(&self, i: u64) -> Result<Block, Self::Error> {
+        unimplemented!();
+    }
+
+    fn b_put(&self, b: &Block) -> Result<(), Self::Error> {
+        unimplemented!();
+    }
+
+    fn b_free(&self, i: u64) -> Result<Block, Self::Error> {
+        unimplemented!();
+    }
+
+    fn b_zero(&mut self, i: u64) -> Result<(), Self::Error> {
+        unimplemented!();
+    }
+
+    fn b_alloc(&mut self) -> Result<u64, Self::Error> {
+        unimplemented!();
+    }
+
+    fn sup_get(&self) -> Result<SuperBlock, Self::Error> {
+        unimplemented!();
+    }
+    
+    fn sup_put(&self, sup: &SuperBlock) -> Result<(), Self::Error> {
+        unimplemented!();
+    }
+
+}
+
+impl FileSysSupport for EsFS1 {
+
+    type Error = BlockError;
+
+    fn sb_valid(sb: &SuperBlock) -> bool {
+        let region_order_correct = sb.inodestart < sb.bmapstart && sb.bmapstart < sb.datastart;
+
+        // Inode size may not evenly divide into block size
+        let inodes_per_block = floor(sb.block_size/DINODE_SIZE,0);
+        let inode_region_size = ceil(sb/inodes_per_block,0) as i32;
+        let inodes_fit = inode_region_size <= (sb.bmapstart - sb.inodestart);
+
+        let data_fits = (sb.nblocks - sb.datastart) >= sb.ndatablocks;
+        
+        region_order_correct && inodes_fit && data_fits
+    }
+
+    fn mkfs<P: AsRef<Path>>(path: P, sb: &SuperBlock) -> Result<Self, Self::Error> {
+        // Check superblock validity
+        if !Self.sb_valid(&sb) { return Err(BlockError::MkFSError("Invalid superblock!")); }
+        // Create filesystem instance
+        let newFS = EsFS1 {
+            dev: Device::new(p, sb.block_size, sb.nblocks),
+            sb: sb,
+        }
+        // Write superblock to disk
+        newFS.sup_put(sb);
+    }
+
+    fn mountfs(dev: Device) -> Result<Self, Self::Error> {
+        
+    }
+
+    fn unmountfs(self) -> Device {
+        self.dev
+    }
+
+}
+
+
+#[derive(Error, Debug)]
+pub enum BlockError {
+    /// Error during initialisation
+    #[error("Error during initialisation of filesystem: {0}")]
+    MkFSError(&'static str),
+    
+    ControllerError(#[from] 
+}
 
 // Here we define a submodule, called `my_tests`, that will contain your unit
 // tests for this module.

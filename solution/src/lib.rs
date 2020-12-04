@@ -41,7 +41,7 @@
 //! 1.47, you don't have to do anything. Otherwise, replace the version
 //! below with the output of `rustc --version`.
 //!
-//! VERSION: rustc 1.47 (2020-10-08)
+//! VERSION: rustc 1.48 (2020-11-19)
 
 // This line forces you to write documentation for all important things.
 #![deny(missing_docs)]
