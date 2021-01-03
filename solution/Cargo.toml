@@ -1,7 +1,8 @@
 [package]
 name = "cplfs_sol"
 version = "0.1.0"
-authors = ["Thomas Van Strydonck <Thomas.VanStrydonck@cs.kuleuven.be>"]
+authors = ["Thomas Van Strydonck <Thomas.VanStrydonck@cs.kuleuven.be>",
+		   "Elias Storme <elias.storme@student.kuleuven.be>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -14,6 +15,11 @@ version = "*"
 anyhow = "1.0.33" #Blanket error handling
 thiserror = "1.0.21" #Concise error definitions, avoiding boilerplate
 libmath = "0.2.1"
+bitintr = "0.3.0"
+lazy_static = "1.4.0"
+regex = "1.4.2"
+bincode = "1.3.1"
+serde = { version = "1.0.117", features = ["derive"] } #Deriving (de)serialization
 
 [features]
 # A feature with no dependencies is used mainly for conditional compilation,
